@@ -6,11 +6,11 @@ int rnd(int min, int max)
     return (int)rand() % (max - min) + min;
 }
 
-vec2 rnd_vec2(int width, int height)
+vec2 rnd_vec2(int x, int y)
 {
     vec2 v;
-    v.x = rnd(0, height);
-    v.y = rnd(0, width);
+    v.x = rnd(0, y);
+    v.y = rnd(0, x);
     return v;
 }
 
