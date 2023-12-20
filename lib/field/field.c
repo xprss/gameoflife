@@ -1,94 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <unistd.h>
-
-#define WIDTH 50
-#define HEIGHT 35
-#define GENERATIONS 1000
-
-#define VILLAGE_VERSION 0
-
-#define EMPTY 0
-#define BACTERIA 1
-
-#if VILLAGE_VERSION
-#define VILLAGE 2
-#endif
-
-// Data structures
-typedef struct
-{
-    int x;
-    int y;
-} vec2;
-
-typedef struct field_s
-{
-    int *occupations;
-    int *next_occupations;
-    int current_generation;
-} field_t;
-
-// Prototypes
-void DBG_print_field_content(field_t);
-int rnd(int, int);
-field_t field_init();
-void add_bacteria(field_t *, vec2);
-void kill_bacteria(field_t *, vec2);
-vec2 get_free_position(field_t);
-vec2 i2v2(int, int);
-int v22i(vec2, int);
-vec2 rnd_vec2(int, int);
-int is_bacteria(field_t, vec2);
-int is_village(field_t, vec2);
-void new_bacteria(field_t *);
-void update(field_t *);
-int clamp(int, int, int);
-int surrounders(int *, vec2);
-void field_free(field_t);
-void new_bacteria_n(field_t *, int);
-void copy_field(field_t *);
-int msleep(long);
-int get_cell_type(field_t, int);
-
-// Main
-int main(int argc, char *argv[])
-{
-    if (argc != 3)
-    {
-        printf("Usage: ./main [time_interval (ms)] [amount_of_bacteria (<=%d)]", WIDTH * HEIGHT);
-        return -1;
-    }
-    int time_interval = atoi(argv[1]);
-    int amount_of_bacteria = atoi(argv[2]);
-
-    field_t field = field_init();
-    new_bacteria_n(&field, amount_of_bacteria);
-
-    while (field.current_generation < GENERATIONS)
-    {
-        system("clear");
-        printf("Generation: %d\n\n", field.current_generation);
-        DBG_print_field_content(field);
-        update(&field);
-        field.current_generation++;
-        msleep(time_interval);
-    }
-
-    field_free(field);
-    return 0;
-}
-
-// Implementations
-int clamp(int min, int val, int max)
-{
-    if (val < min)
-        return min;
-    if (val > max)
-        return max;
-    return val;
-}
+#include "field.h"
 
 void update(field_t *field)
 {
@@ -104,7 +14,7 @@ void update(field_t *field)
         }
 
 #endif
-        bacteria_neighboors = surrounders(field->occupations, i2v2(i, WIDTH));
+        bacteria_neighboors = surrounders(*field, i2v2(i, WIDTH));
 
         switch (bacteria_neighboors)
         {
@@ -140,6 +50,7 @@ void update(field_t *field)
         }
     }
     copy_field(field);
+    field->current_generation++;
 }
 
 void copy_field(field_t *field)
@@ -151,7 +62,7 @@ void copy_field(field_t *field)
     }
 }
 
-int surrounders(int *occ, vec2 pos)
+int surrounders(field_t field, vec2 pos)
 {
     int surrounders = 0;
     int i, j;
@@ -172,7 +83,7 @@ int surrounders(int *occ, vec2 pos)
                 continue;
             }
 
-            surrounders += occ[v22i(_pos, WIDTH)] == BACTERIA ? BACTERIA : EMPTY;
+            surrounders += field.occupations[v22i(_pos, WIDTH)] == BACTERIA ? BACTERIA : EMPTY;
         }
     }
     return surrounders;
@@ -192,14 +103,11 @@ void new_bacteria(field_t *field)
     add_bacteria(field, new_pos);
 }
 
-int rnd(int min, int max)
-{
-    return (int)rand() % (max - min) + min;
-}
+
 
 field_t field_init()
 {
-    int i, j = 0;
+    int i;
     field_t f;
     f.occupations = (int *)malloc(WIDTH * HEIGHT * sizeof(int));
     f.next_occupations = (int *)malloc(WIDTH * HEIGHT * sizeof(int));
@@ -244,27 +152,6 @@ vec2 get_free_position(field_t field)
         }
         return new_position;
     }
-}
-
-vec2 i2v2(int i, int C)
-{
-    vec2 v2;
-    v2.x = (int)i / C;
-    v2.y = i % C;
-    return v2;
-}
-
-int v22i(vec2 v, int C)
-{
-    return v.x * C + v.y;
-}
-
-vec2 rnd_vec2(int width, int height)
-{
-    vec2 v;
-    v.x = rnd(0, height);
-    v.y = rnd(0, width);
-    return v;
 }
 
 int is_bacteria(field_t field, vec2 pos)
@@ -312,23 +199,3 @@ int get_cell_type(field_t field, int i)
     return field.occupations[i];
 }
 
-int msleep(long msec)
-{
-    struct timespec ts;
-    int res;
-
-    if (msec < 0)
-    {
-        return -1;
-    }
-
-    ts.tv_sec = msec / 1000;
-    ts.tv_nsec = (msec % 1000) * 1000000;
-
-    do
-    {
-        res = nanosleep(&ts, &ts);
-    } while (res);
-
-    return res;
-}

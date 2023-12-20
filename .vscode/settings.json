@@ -2,8 +2,14 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "*.cpp": "cpp",
+        "*.c": "c",
         "time.h": "c",
         "curses.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "field.h": "c",
+        "shlib.h": "c",
+        "vec2.h": "c"
     }
 }
