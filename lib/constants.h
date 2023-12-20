@@ -1,5 +1,6 @@
 #define WIDTH 50
 #define HEIGHT 35
+#define MAX_BACTERIAS WIDTH*HEIGHT
 #define GENERATIONS 1000
 
 #define VILLAGE_VERSION 0
