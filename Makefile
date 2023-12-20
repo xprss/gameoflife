@@ -1,10 +1,10 @@
 CC = gcc
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -O0
 SRC_DIR = .
 LIB_DIR = lib
 OBJ_DIR = obj
 BIN_DIR = bin
-SOURCES = $(wildcard $(SRC_DIR)/*.c $(LIB_DIR)/field/*.c $(LIB_DIR)/shlib/*.c $(LIB_DIR)/vec2/*.c)
+SOURCES = $(wildcard $(SRC_DIR)/*.c $(LIB_DIR)/*/*.c)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 TARGET = $(BIN_DIR)/gameoflife
 
@@ -12,7 +12,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) -g $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
