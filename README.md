@@ -1,0 +1,1 @@
+Just a little implementation in C of Game of Life by Conway.
