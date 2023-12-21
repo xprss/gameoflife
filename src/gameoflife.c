@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "lib/constants.h"
-#include "lib/field/field.h"
-#include "lib/shlib/shlib.h"
-#include "lib/vec2/vec2.h"
+#include "include/constants.h"
+#include "include/field.h"
+#include "include/shlib.h"
+#include "include/vec2.h"
 
 // Main
 int main(int argc, char *argv[])

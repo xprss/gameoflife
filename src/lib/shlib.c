@@ -1,4 +1,4 @@
-#include "shlib.h"
+#include "../include/shlib.h"
 #include <time.h>
 
 int rnd(int min, int max)

@@ -1,4 +1,4 @@
-#include "field.h"
+#include "../include/field.h"
 
 void update(field_t *field)
 {

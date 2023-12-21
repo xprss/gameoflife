@@ -1,4 +1,4 @@
-#include "vec2.h"
+#include "../include/vec2.h"
 
 vec2 i2v2(int i, int C)
 {

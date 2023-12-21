@@ -2,9 +2,9 @@
 #define __FIELD_H__
 #include <stdlib.h>
 #include <stdio.h>
-#include "../vec2/vec2.h"
-#include "../constants.h"
-#include "../shlib/shlib.h"
+#include "vec2.h"
+#include "constants.h"
+#include "shlib.h"
 
 typedef struct field_s
 {
